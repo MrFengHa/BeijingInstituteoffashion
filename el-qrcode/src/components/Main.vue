@@ -60,7 +60,7 @@
 
 <style scoped>
   .imageClass {
-    margin-left: -2.5vw;
+    margin-left: -2.1vw;
     margin-top: -1.1vh;
     width: 100vw;
     height: 28vh;

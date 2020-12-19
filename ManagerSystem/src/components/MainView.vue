@@ -1,14 +1,17 @@
 <template>
   <el-container>
-    <el-header>Header</el-header>
-    <el-container style="height: 100%">
-      <el-aside width="200px">
+    <el-header style="height: 10vh; background-color: #545c70;" >
+      <harder-view></harder-view>
+    </el-header>
+    <el-container>
+      <el-aside width="15%" style="height: 87vh">
         <menu-item></menu-item>
-
       </el-aside>
       <el-container>
-        <el-main>Main</el-main>
-        <el-footer>Footer</el-footer>
+        <el-main>
+          <router-view ></router-view>
+        </el-main>
+
       </el-container>
     </el-container>
   </el-container>
@@ -16,12 +19,11 @@
 
 <script>
   import MenuItem from "../components/MenuItem";
+  import HarderView from "./HarderView";
     export default {
         name: "MainView",
-      components: {MenuItem},
-      comments:{
-        MenuItem
-      }
+      components: {  HarderView, MenuItem},
+
     }
 </script>
 
@@ -29,8 +31,8 @@
   .el-header, .el-footer {
     background-color: #B3C0D1;
     color: #333;
-    text-align: center;
-    line-height: 60px;
+    text-align: left;
+    line-height: 50px;
   }
 
   .el-aside {
@@ -43,8 +45,9 @@
   .el-main {
     background-color: #E9EEF3;
     color: #333;
-    text-align: center;
-    line-height: 160px;
+    text-align: right;
+    line-height: 30px;
+
   }
 
   body > .el-container {
