@@ -14,10 +14,7 @@
         label="名称"
         prop="name">
       </el-table-column>
-      <el-table-column
-        label="名称"
-        prop="name">
-      </el-table-column>
+
       <el-table-column
         align="right">
         <template slot="header" slot-scope="scope">
@@ -46,10 +43,7 @@
     name: "ContentListView",
     data() {
       return {
-        tableData: [
-          {number:"001",name: "名称1"},
-          {number:"002",name: "名称2"},
-          ],
+        tableData: [],
         search: ''
       }
     },
@@ -57,13 +51,39 @@
       to() {
         this.$router.push({path: "/exhibits/exhibitsAdd"});
       },
+      findAll(){
+        let _this = this;
+        this.$http.get("http://localhost:8080/manager/findAll").then((res)=>{
+          _this.tableData = res.data
+        })
+      },
+
       handleEdit(index, row) {
         console.log(index, row);
       },
       handleDelete(index, row) {
-        console.log(index, row);
+        let _this = this;
+        this.$http.post("http://localhost:8080/manager/deleteExhibits",row).then((res)=>{
+          if (res.data.success==true) {
+            console.log(res.data.success)
+            this.$message({
+                message: "删除成功",
+                type: 'success',
+              }
+            );
+            _this.findAll()
+          } else {
+            this.$message({
+              message: "删除失败",
+              type: 'error'
+            });
+          }
+        })
       }
     },
+    created() {
+     this.findAll();
+    }
   }
 </script>
 

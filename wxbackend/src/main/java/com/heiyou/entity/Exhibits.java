@@ -22,8 +22,5 @@ import java.io.File;
 public class Exhibits {
     private String number;
     private String name;
-    private String imageName;
-    private String cnAudioName;
-    private String enAudioName;
     private String desc;
 }
