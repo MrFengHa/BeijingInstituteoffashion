@@ -30,7 +30,16 @@ public class ExhibitsManagerController {
     public Map<String, Object> deleteExhibits(@RequestBody Exhibits exhibits) {
 
         Map<String, Object> map = new HashMap<>();
+
         try {
+//            File path = new File(ResourceUtils.getURL("classpath:").getPath());
+//            File tempFile = new File(path.getAbsolutePath(), "static/wxRes"+ exhibits.getNumber());
+            File tempFile = new File( "/wxRes/"+ exhibits.getNumber() );
+            System.out.println(tempFile.isDirectory());
+            for (File file:tempFile.listFiles()){
+                file.delete();
+            }
+            tempFile.delete();
             exhibitsService.delete(exhibits.getNumber());
             map.put("success", true);
         } catch (Exception e) {
@@ -76,11 +85,11 @@ public class ExhibitsManagerController {
             return map;
         }
         //获取绝对路径
-        File path = new File(ResourceUtils.getURL("classpath:").getPath());
-        System.out.println(path.getAbsolutePath());
+        //File path = new File(ResourceUtils.getURL("classpath:").getPath());
+       // System.out.println(path.getAbsolutePath());
 
-        //自定义路径
-        File tempFile = new File(path.getAbsolutePath(), "static\\" + exhibits.getNumber() + "\\");
+        //自定义路径 path.getAbsolutePath(),
+        File tempFile = new File( "/wxRes/"+ exhibits.getNumber() );
         if (!tempFile.isDirectory()) {
             tempFile.mkdirs();
         }
@@ -92,9 +101,12 @@ public class ExhibitsManagerController {
             image.transferTo(imageFile);
             cnAudio.transferTo(cnAudioFile);
             enAudio.transferTo(enAudioFile);
-            System.out.println(new File(tempFile + "/image.jpg").getAbsoluteFile());
+
 
             exhibitsService.addExhibits(exhibits);
+            for (File fs : tempFile.listFiles()){
+                System.out.println(fs.getName());
+            }
         } catch (Exception e) {
             e.printStackTrace();
             imageFile.delete();

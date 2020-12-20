@@ -6,7 +6,10 @@ import router from './router'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import axios from 'axios';
-import loading from "./loading";
+
+axios.defaults.baseURL = "http://39.102.41.207/"; // 关键步骤–填写后台请求统一的地址
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+
 
 Vue.prototype.$http=axios;
 

@@ -53,7 +53,7 @@
       },
       findAll(){
         let _this = this;
-        this.$http.get("http://localhost:8080/manager/findAll").then((res)=>{
+        this.$http.get("manager/findAll").then((res)=>{
           _this.tableData = res.data
         })
       },
@@ -63,7 +63,7 @@
       },
       handleDelete(index, row) {
         let _this = this;
-        this.$http.post("http://localhost:8080/manager/deleteExhibits",row).then((res)=>{
+        this.$http.post("manager/deleteExhibits",row).then((res)=>{
           if (res.data.success==true) {
             console.log(res.data.success)
             this.$message({

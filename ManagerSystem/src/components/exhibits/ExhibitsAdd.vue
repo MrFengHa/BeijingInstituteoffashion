@@ -79,7 +79,6 @@
 
 <script>
   import loading from "../../loading";
-  import http from "../../http";
 
 
   export default {
@@ -220,7 +219,7 @@
                 'Content-Type': 'multipart/form-data'
               }
             }
-            this.$http.post("http://localhost:8080/manager/addExhibits", data, config).then((res) => {
+            this.$http.post("manager/addExhibits", data, config).then((res) => {
 
               console.log('请求本地接口OK')
               console.log(res)
@@ -232,7 +231,7 @@
               this.progressPercent = 0
               console.log(res.data.success)
 
-              if (res.data.success==true) {
+              if (res.data.success) {
                 console.log(res.data.success)
                 this.$message({
                     message: "添加成功",
