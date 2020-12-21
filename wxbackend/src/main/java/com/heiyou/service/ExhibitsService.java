@@ -43,4 +43,11 @@ public interface ExhibitsService {
      * @return
      */
     void delete(String number);
+
+    /**
+     * 根据编号查询展品信息
+     * @param number
+     * @return
+     */
+    Exhibits findById(String number);
 }

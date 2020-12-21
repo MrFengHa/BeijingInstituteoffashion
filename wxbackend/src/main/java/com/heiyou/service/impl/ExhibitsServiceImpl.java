@@ -70,4 +70,15 @@ public class ExhibitsServiceImpl implements ExhibitsService {
     public void delete(String number) {
          exhibitsMapper.delete(number);
     }
+
+    /**
+     * 根据编号查询展品信息
+     *
+     * @param number
+     * @return
+     */
+    @Override
+    public Exhibits findById(String number) {
+        return exhibitsMapper.findById(number);
+    }
 }

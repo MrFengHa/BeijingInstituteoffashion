@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import LoginView from "../components/LoginView";
 import MainView from "../components/MainView";
 import ExhibitsListView from "../components/exhibits/ExhibitsListView";
-import ExhibitsAdd from "../components/exhibits/ExhibitsAdd";
+import ExhibitsManager from "../components/exhibits/ExhibitsManager";
 
 Vue.use(Router)
 
@@ -17,7 +17,8 @@ export default new Router({
         {path:"/exhibits/exhibitsList",component:ExhibitsListView
 
         },
-        {path:"/exhibits/exhibitsAdd",component:ExhibitsAdd}
+        {path:"/exhibits/exhibitsToAdd",component:ExhibitsManager},
+        {path:"/exhibits/exhibitsToUpdate",component:ExhibitsManager}
         ]
     },
 

@@ -3,12 +3,14 @@ package com.heiyou.controller;
 import com.heiyou.entity.Exhibits;
 import com.heiyou.service.ExhibitsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,17 +27,34 @@ import java.util.Map;
 public class ExhibitsManagerController {
     @Autowired
     ExhibitsService exhibitsService;
+    @Value("${myservice.path}")
+    String servicePath ;
 
+    @GetMapping("findById")
+    public Exhibits findById(String number){
+
+        Exhibits exhibits =exhibitsService.findById(number);
+        exhibits.setImagePath("http://localhost:9090/"+exhibits.getNumber()+"/image.jpg");
+        exhibits.setCnAudioPath("http://localhost:9090/"+exhibits.getNumber()+"/cn.mp3");
+        exhibits.setEnAudioPath("http://localhost:9090/"+exhibits.getNumber()+"/en.mp3");
+
+
+        return exhibits;
+    }
+
+
+    /**
+     * 删除展品信息
+     * @param exhibits
+     * @return
+     */
     @PostMapping("deleteExhibits")
     public Map<String, Object> deleteExhibits(@RequestBody Exhibits exhibits) {
 
         Map<String, Object> map = new HashMap<>();
 
         try {
-//            File path = new File(ResourceUtils.getURL("classpath:").getPath());
-//            File tempFile = new File(path.getAbsolutePath(), "static/wxRes"+ exhibits.getNumber());
-            File tempFile = new File( "/wxRes/"+ exhibits.getNumber() );
-            System.out.println(tempFile.isDirectory());
+            File tempFile = new File( servicePath+ exhibits.getNumber() );
             for (File file:tempFile.listFiles()){
                 file.delete();
             }
@@ -84,12 +103,7 @@ public class ExhibitsManagerController {
             map.put("msg", "名称不能重复");
             return map;
         }
-        //获取绝对路径
-        //File path = new File(ResourceUtils.getURL("classpath:").getPath());
-       // System.out.println(path.getAbsolutePath());
-
-        //自定义路径 path.getAbsolutePath(),
-        File tempFile = new File( "/wxRes/"+ exhibits.getNumber() );
+        File tempFile = new File( servicePath+ exhibits.getNumber() );
         if (!tempFile.isDirectory()) {
             tempFile.mkdirs();
         }
@@ -102,11 +116,8 @@ public class ExhibitsManagerController {
             cnAudio.transferTo(cnAudioFile);
             enAudio.transferTo(enAudioFile);
 
-
+            System.out.println(exhibits);
             exhibitsService.addExhibits(exhibits);
-            for (File fs : tempFile.listFiles()){
-                System.out.println(fs.getName());
-            }
         } catch (Exception e) {
             e.printStackTrace();
             imageFile.delete();

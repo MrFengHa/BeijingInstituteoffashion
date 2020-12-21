@@ -7,14 +7,17 @@
       <el-form-item label="展品编号" prop="number">
         <el-input v-model="ruleForm.number"></el-input>
       </el-form-item>
-      <el-form-item label="展品名称" prop="name">
-        <el-input v-model="ruleForm.name"></el-input>
+      <el-form-item label="中文名称" prop="cnName">
+        <el-input v-model="ruleForm.cnName"></el-input>
+      </el-form-item>
+      <el-form-item label="英文名称" prop="enName">
+        <el-input v-model="ruleForm.enName"></el-input>
       </el-form-item>
       <el-form-item ref="upload_attach_item_iamge" label="展示图片" prop="image" size='small'>
         <el-upload style="float: left"
                    ref="upload_attach"
                    class="upload-demo"
-                   action="http://localhost:8080/manager/addExhibits"
+                   action=""
                    multiple
                    accept=".jpg,.png,.jpeg"
                    :limit="1"
@@ -34,9 +37,9 @@
         <el-upload style="float: left"
                    ref="upload_attach"
                    class="upload-demo"
-                   action="http://localhost:8080/manager/addExhibits"
+                   action=""
                    multiple
-                   accept=".mp3,.exe"
+                   accept=".mp3"
                    :limit="1"
                    :on-change="changeCnAudio"
                    :on-exceed="handleExceed"
@@ -52,9 +55,9 @@
         <el-upload style="float: left"
                    ref="upload_attach"
                    class="upload-demo"
-                   action="http://localhost:8080/manager/addExhibits"
+                   action=""
                    multiple
-                   accept=".mp3,.exe"
+                   accept=".mp3,"
                    :limit="1"
                    :on-change="changeEnAudio"
                    :on-exceed="handleExceed"
@@ -66,11 +69,14 @@
           <div slot="tip" class="el-upload__tip">注:上传mp3不能超过1M</div>
         </el-upload>
       </el-form-item>
-      <el-form-item label="展品描述" prop="desc">
-        <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+      <el-form-item label="中文描述" prop="cnDesc">
+        <el-input type="textarea" autosize v-model="ruleForm.cnDesc"></el-input>
+      </el-form-item>
+      <el-form-item label="英文描述" prop="enDesc">
+        <el-input type="textarea" autosize v-model="ruleForm.enDesc"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm')">{{buttonTitle}}</el-button>
         <el-button @click="resetForm('ruleForm')">重置</el-button>
       </el-form-item>
     </el-form>
@@ -83,7 +89,7 @@
 
   export default {
 
-    name: "ExhibitsAdd",
+    name: "ExhibitsManager",
     data() {
       //验证密码
       var validateAttachImage = (rule, value, callback) => {
@@ -115,8 +121,10 @@
       return {
         ruleForm: {
           number: '',
-          name: '',
-          desc: ''
+          cnName: '',
+          enName: '',
+          cnDesc: '',
+          enDesc: ''
         },
         imageFileList: [],
         cnAudioFileList: [],
@@ -129,9 +137,13 @@
             {required: true, message: '请输入展品编号', trigger: 'blur'},
             {min: 3, max: 3, message: '编号为三个字符', trigger: 'blur'}
           ],
-          name: [
-            {required: true, message: '展品名称', trigger: 'blur'},
-            {min: 1, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur'}
+          cnName: [
+            {required: true, message: '请输入中文名称', trigger: 'blur'},
+            {min: 1, max: 50, message: '长度在 0 到 50 个字符', trigger: 'blur'}
+          ],
+          enName: [
+            {required: true, message: '请输入英文名称', trigger: 'blur'},
+            {min: 1, max: 100, message: '长度在 0 到 100 个字符', trigger: 'blur'}
           ],
           image: [
             // {  message: '请选择展品图片', trigger: 'blur' },
@@ -146,10 +158,15 @@
             {required: true, validator: validateAttachEnAudio}
 
           ],
-          desc: [
-            {required: false, message: '请填写活动形式', trigger: 'blur'}
+          cnDesc: [
+            {required: true, message: '请输入中文描述', trigger: 'blur'}
+          ],
+          enDesc: [
+            {required: true, message: '请输入英文描述', trigger: 'blur'}
           ]
-        }
+        },
+
+       buttonTitle:""
       };
     },
     methods: {
@@ -157,23 +174,17 @@
         this.$router.push({path: "/exhibits/exhibitsList"});
       },
       changFileImage(file, imageFileList) {
-        console.log("changFile");
-        console.log(imageFileList);
         //选择文件后，给fileList对象赋值
         this.imageFileList = imageFileList
         this.$refs.upload_attach_item_iamge.validate();
 
       },
       changeCnAudio(file, cnAudioList) {
-        console.log("changeCnAudio");
-        console.log(cnAudioList);
         //选择文件后，给fileList对象赋值
         this.cnAudioFileList = cnAudioList
         this.$refs.upload_attach_item_cnAudio.validate();
 
       }, changeEnAudio(file, enAudioList) {
-        console.log("changeEnAudio");
-        console.log(enAudioList);
         //选择文件后，给fileList对象赋值
         this.enAudioFileList = enAudioList
         this.$refs.upload_attach_item_enAudio.validate();
@@ -201,6 +212,7 @@
             data.append("image", this.imageFileList[0].raw);
             data.append("cnAudio", this.cnAudioFileList[0].raw);
             data.append("enAudio", this.enAudioFileList[0].raw);
+
             for (let key in this.ruleForm) {
               data.append(key, this.ruleForm[key])
             }
@@ -213,7 +225,6 @@
                 // progressEvent.total:被上传文件的总大小
                 this.progressPercent = Number((progressEvent.loaded / progressEvent.total * 100).toFixed(0))
                 _loading.setText('作品上传中，进度：' + this.progressPercent + "%") //更新dialog进度，优化体验
-                console.log(this.progressPercent)
               },
               headers: {
                 'Content-Type': 'multipart/form-data'
@@ -221,18 +232,14 @@
             }
             this.$http.post("manager/addExhibits", data, config).then((res) => {
 
-              console.log('请求本地接口OK')
-              console.log(res)
               this.imageFileList = [];// 提交完成清空附件列表
               this.cnAudioFileList = [];// 提交完成清空附件列表
               this.enAudioFileList = [];// 提交完成清空附件列表
               _loading.close(); // 关闭加载框
               // this.show_progress = false
               this.progressPercent = 0
-              console.log(res.data.success)
 
               if (res.data.success) {
-                console.log(res.data.success)
                 this.$message({
                     message: "添加成功",
                     type: 'success',
@@ -248,7 +255,6 @@
                 });
               }
             }).catch(function (error) { // 请求失败处理
-              console.log('请求本地接口失败' + error);
             });
           } else {
             this.$message({
@@ -265,6 +271,24 @@
         this.cnAudioFileList = [];
         this.enAudioFileList = [];
       }
+    },
+    created() {
+      if (this.$route.query.number!=null){
+       this.buttonTitle = "更新";
+       let _this = this;
+       this.$http.get("manager/findById?number="+this.$route.query.number).then((res)=>{
+         _this.ruleForm = res.data;
+         console.log(res.data)
+         _this.$http.get(res.data.imagePath).then((resImage)=>{
+           console.log(resImage.data)
+         })
+
+       })
+
+      }else{
+        this.buttonTitle = "创建";
+      }
+
     }
   }
 </script>

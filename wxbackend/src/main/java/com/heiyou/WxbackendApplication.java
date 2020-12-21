@@ -16,7 +16,6 @@ import java.io.FileNotFoundException;
 public class WxbackendApplication {
     public static void main(String[] args) {
         SpringApplication.run(WxbackendApplication.class, args);
-        System.out.println(System.getProperty("user.dir"));
     }
 
 }

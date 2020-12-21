@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-        <el-button type="primary"  @click="to()" round>添加</el-button>
+        <el-button type="primary"  @click="toAddExhibits()" round>添加</el-button>
       </div>
     <el-table
       :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
@@ -11,10 +11,13 @@
         prop="number">
       </el-table-column>
       <el-table-column
-        label="名称"
-        prop="name">
+        label="中文名称"
+        prop="cnName">
       </el-table-column>
-
+      <el-table-column
+        label="英文名称"
+        prop="enName">
+      </el-table-column>
       <el-table-column
         align="right">
         <template slot="header" slot-scope="scope">
@@ -48,8 +51,8 @@
       }
     },
     methods: {
-      to() {
-        this.$router.push({path: "/exhibits/exhibitsAdd"});
+      toAddExhibits() {
+        this.$router.push({path: "/exhibits/exhibitsToAdd"});
       },
       findAll(){
         let _this = this;
@@ -59,7 +62,7 @@
       },
 
       handleEdit(index, row) {
-        console.log(index, row);
+        this.$router.push({path: "/exhibits/exhibitsToUpdate?number="+row.number});
       },
       handleDelete(index, row) {
         let _this = this;

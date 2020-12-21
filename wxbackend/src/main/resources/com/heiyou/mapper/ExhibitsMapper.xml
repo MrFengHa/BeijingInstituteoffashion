@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.heiyou.mapper.ExhibitsMapper">
     <insert id="addExhibits" parameterType="Exhibits">
-        insert into t_exhibits values (#{number},#{name},#{desc})
+        insert into t_exhibits values (#{number},#{cnName},#{enName},#{cnDesc},#{enDesc})
     </insert>
     <select id="findAll" resultType="Exhibits">
         select *
@@ -14,10 +14,14 @@
     </select>
 
     <select id="selectOrderByNameCount" parameterType="string" resultType="int">
-        select count(name) from t_exhibits where name = #{name}
+        select count(cnName) from t_exhibits where cnName = #{cnName}
     </select>
 
     <delete id="delete" parameterType="string" >
         delete from t_exhibits where number = #{number}
     </delete>
+
+    <select id="findById" parameterType="string" resultType="Exhibits">
+        select * from t_exhibits where number = #{number}
+    </select>
 </mapper>

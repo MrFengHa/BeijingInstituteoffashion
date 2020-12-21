@@ -21,6 +21,11 @@ import java.io.File;
 @Accessors(chain = true)
 public class Exhibits {
     private String number;
-    private String name;
-    private String desc;
+    private String cnName;
+    private String enName;
+    private String cnDesc;
+    private String enDesc;
+    private String imagePath;
+    private String cnAudioPath;
+    private String enAudioPath;
 }
