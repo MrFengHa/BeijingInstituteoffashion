@@ -39,7 +39,7 @@ public class ExhibitsManagerController {
         Integer exhibitsNameCount = exhibitsService.selectOrderByNameCount(exhibits.getCnName());
 
         HashMap<String, Object> map = new HashMap();
-        if (exhibitsNameCount > 0) {
+        if (exhibitsNameCount >= 1) {
             map.put("success", false);
             map.put("msg", "名称不能重复");
             return map;

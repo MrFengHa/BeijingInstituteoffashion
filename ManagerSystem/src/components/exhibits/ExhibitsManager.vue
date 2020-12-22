@@ -244,10 +244,8 @@
             }
 
             if (this.buttonTitle == "更新") {
-              console.log("执行更新")
               this.updateExhibits(data, _loading, config, _this)
             } else {
-              console.log("执行创建")
               this.addExhibits(data, _loading, config, _this)
             }
 
@@ -283,7 +281,6 @@
             }, 100)
 
           } else {
-            console.log("error")
             this.$message({
               message: res.data.msg,
               type: 'error'
@@ -316,7 +313,6 @@
             }, 100)
 
           } else {
-            console.log("error")
             this.$message({
               message: res.data.msg,
               type: 'error'
