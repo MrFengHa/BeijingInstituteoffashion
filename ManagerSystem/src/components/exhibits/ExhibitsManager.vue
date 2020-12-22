@@ -5,10 +5,12 @@
     </div>
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
       <el-form-item label="展品编号" prop="number">
-        <el-input v-model="ruleForm.number"></el-input>
+        <el-input v-model="ruleForm.number" :disabled=isUpdate></el-input>
       </el-form-item>
       <el-form-item label="中文名称" prop="cnName">
         <el-input v-model="ruleForm.cnName"></el-input>
+
+
       </el-form-item>
       <el-form-item label="英文名称" prop="enName">
         <el-input v-model="ruleForm.enName"></el-input>
@@ -27,6 +29,10 @@
                    :file-list="imageFileList"
                    :auto-upload="false"
         >
+
+          <!--          <div style="width:5vh;margin-top: 5px">-->
+          <!--            <el-image v-if=isUpdate  fit="fill" :src="ruleForm.imagePath" :preview-src-list="srcList" ></el-image>-->
+          <!--          </div>-->
           <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
           <div slot="tip" class="el-upload__tip">注:上传图片不能超过1M</div>
         </el-upload>
@@ -124,8 +130,12 @@
           cnName: '',
           enName: '',
           cnDesc: '',
-          enDesc: ''
+          enDesc: '',
+          imagePath: '',
+          cnAudioPath: '',
+          enAudioPath: ''
         },
+        srcList: [],
         imageFileList: [],
         cnAudioFileList: [],
         enAudioFileList: [],
@@ -166,7 +176,8 @@
           ]
         },
 
-       buttonTitle:""
+        buttonTitle: "",
+        isUpdate: true
       };
     },
     methods: {
@@ -205,6 +216,7 @@
         this.$message.warning(`当前限制最多选择 1 个文件`);
       },
       submitForm(formName) {
+
         let _this = this;
         this.$refs[formName].validate((valid) => {
           if (valid) {
@@ -230,32 +242,15 @@
                 'Content-Type': 'multipart/form-data'
               }
             }
-            this.$http.post("manager/addExhibits", data, config).then((res) => {
 
-              this.imageFileList = [];// 提交完成清空附件列表
-              this.cnAudioFileList = [];// 提交完成清空附件列表
-              this.enAudioFileList = [];// 提交完成清空附件列表
-              _loading.close(); // 关闭加载框
-              // this.show_progress = false
-              this.progressPercent = 0
+            if (this.buttonTitle == "更新") {
+              console.log("执行更新")
+              this.updateExhibits(data, _loading, config, _this)
+            } else {
+              console.log("执行创建")
+              this.addExhibits(data, _loading, config, _this)
+            }
 
-              if (res.data.success) {
-                this.$message({
-                    message: "添加成功",
-                    type: 'success',
-                  }
-                );
-                setTimeout(function () {
-                  _this.to();
-                }, 1500)
-              } else {
-                this.$message({
-                  message: res.data.msg,
-                  type: 'error'
-                });
-              }
-            }).catch(function (error) { // 请求失败处理
-            });
           } else {
             this.$message({
               message: '请填写完整信息再后提交',
@@ -265,28 +260,95 @@
           }
         });
       },
+
+      updateExhibits(data, _loading, config, _this) {
+        this.$http.post("manager/updateExhibits", data, config).then((res) => {
+
+          _loading.close(); // 关闭加载框
+          // this.show_progress = false
+          this.progressPercent = 0
+          if (res.data.success == true) {
+
+            this.$message({
+                message: "更新成功",
+                type: 'success',
+              }
+            );
+            setTimeout(function () {
+              _this.imageFileList = [];// 提交完成清空附件列表
+              _this.cnAudioFileList = [];// 提交完成清空附件列表
+              _this.enAudioFileList = [];// 提交完成清空附件列表
+              _this.to();
+
+            }, 100)
+
+          } else {
+            console.log("error")
+            this.$message({
+              message: res.data.msg,
+              type: 'error'
+            });
+          }
+        }).catch(function (error) { // 请求失败处理
+        });
+      },
+
+      addExhibits(data, _loading, config, _this) {
+        this.$http.post("manager/addExhibits", data, config).then((res) => {
+
+
+          _loading.close(); // 关闭加载框
+          // this.show_progress = false
+          this.progressPercent = 0
+          if (res.data.success == true) {
+
+            this.$message({
+                message: "创建成功",
+                type: 'success',
+              }
+            );
+            setTimeout(function () {
+              _this.imageFileList = [];// 提交完成清空附件列表
+              _this.cnAudioFileList = [];// 提交完成清空附件列表
+              _this.enAudioFileList = [];// 提交完成清空附件列表
+              _this.to();
+
+            }, 100)
+
+          } else {
+            console.log("error")
+            this.$message({
+              message: res.data.msg,
+              type: 'error'
+            });
+          }
+        }).catch(function (error) { // 请求失败处理
+        });
+      },
+
       resetForm(formName) {
         this.$refs[formName].resetFields();
+        if (this.isUpdate){
+          this.ruleForm.number = this.$route.query.number
+        }
         this.imageFileList = [];
         this.cnAudioFileList = [];
         this.enAudioFileList = [];
       }
     },
     created() {
-      if (this.$route.query.number!=null){
-       this.buttonTitle = "更新";
-       let _this = this;
-       this.$http.get("manager/findById?number="+this.$route.query.number).then((res)=>{
-         _this.ruleForm = res.data;
-         console.log(res.data)
-         _this.$http.get(res.data.imagePath).then((resImage)=>{
-           console.log(resImage.data)
-         })
+      if (this.$route.query.number != null) {
+        this.buttonTitle = "更新";
+        this.isUpdate = true;
+        let _this = this;
+        this.$http.get("manager/findById?number=" + this.$route.query.number).then((res) => {
+          _this.ruleForm = res.data;
+          _this.srcList.push(res.data.imagePath);
+        })
 
-       })
-
-      }else{
+      } else {
         this.buttonTitle = "创建";
+        this.isUpdate = false;
       }
 
     }

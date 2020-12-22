@@ -50,4 +50,10 @@ public interface ExhibitsService {
      * @return
      */
     Exhibits findById(String number);
+
+    /**
+     * 更新展品信息
+     * @param exhibits
+     */
+    void updateExhibits(Exhibits exhibits);
 }

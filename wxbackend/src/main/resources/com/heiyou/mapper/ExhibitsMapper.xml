@@ -14,7 +14,7 @@
     </select>
 
     <select id="selectOrderByNameCount" parameterType="string" resultType="int">
-        select count(cnName) from t_exhibits where cnName = #{cnName}
+        select count(*) from t_exhibits where cnName = #{cnName}
     </select>
 
     <delete id="delete" parameterType="string" >
@@ -24,4 +24,8 @@
     <select id="findById" parameterType="string" resultType="Exhibits">
         select * from t_exhibits where number = #{number}
     </select>
+
+    <update id="updateExhibits" parameterType="Exhibits">
+        update t_exhibits set cnName=#{cnName},enName=#{enName},cnDesc = #{cnDesc},enDesc=#{enDesc} where number = #{number}
+    </update>
 </mapper>

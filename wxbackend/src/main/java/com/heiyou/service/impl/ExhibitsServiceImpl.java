@@ -81,4 +81,14 @@ public class ExhibitsServiceImpl implements ExhibitsService {
     public Exhibits findById(String number) {
         return exhibitsMapper.findById(number);
     }
+
+    /**
+     * 更新展品信息
+     *
+     * @param exhibits
+     */
+    @Override
+    public void updateExhibits(Exhibits exhibits) {
+        exhibitsMapper.updateExhibits(exhibits);
+    }
 }
