@@ -4,13 +4,15 @@ import LoginView from "../components/LoginView";
 import MainView from "../components/MainView";
 import ExhibitsListView from "../components/exhibits/ExhibitsListView";
 import ExhibitsManager from "../components/exhibits/ExhibitsManager";
+import ShowView from "../components/wxshow/ShowView";
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
+    {path: '/', name: 'ShowView', component: ShowView,},
     {
-      path: '/',
+      path: '/manager',
       name: 'MainView',
       component: MainView,
       children:[

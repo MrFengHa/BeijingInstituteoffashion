@@ -236,7 +236,7 @@
                 // progressEvent.loaded:已上传文件大小
                 // progressEvent.total:被上传文件的总大小
                 this.progressPercent = Number((progressEvent.loaded / progressEvent.total * 100).toFixed(0))
-                _loading.setText('作品上传中，进度：' + this.progressPercent + "%") //更新dialog进度，优化体验
+                _loading.setText('文件上传中，进度：' + this.progressPercent + "%") //更新dialog进度，优化体验
               },
               headers: {
                 'Content-Type': 'multipart/form-data'

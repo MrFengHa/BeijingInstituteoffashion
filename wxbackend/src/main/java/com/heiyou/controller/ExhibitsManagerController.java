@@ -4,13 +4,11 @@ import com.heiyou.entity.Exhibits;
 import com.heiyou.service.ExhibitsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,8 +25,10 @@ import java.util.Map;
 public class ExhibitsManagerController {
     @Autowired
     ExhibitsService exhibitsService;
+    @Value("${myserviceres.path}")
+    String serviceResPath;
     @Value("${myservice.path}")
-    String servicePath;
+    String resPath;
 
     @PostMapping("updateExhibits")
     public Map<String, Object> updateExhibits(
@@ -44,7 +44,7 @@ public class ExhibitsManagerController {
             map.put("msg", "名称不能重复");
             return map;
         }
-        File tempFile = new File(servicePath + exhibits.getNumber());
+        File tempFile = new File(serviceResPath + exhibits.getNumber());
         File imageFile = new File(tempFile + "/image.jpg");
         File cnAudioFile = new File(tempFile + "/cn.mp3");
         File enAudioFile = new File(tempFile + "/en.mp3");
@@ -79,9 +79,9 @@ public class ExhibitsManagerController {
     public Exhibits findById(String number) {
 
         Exhibits exhibits = exhibitsService.findById(number);
-        exhibits.setImagePath("http://localhost:9090/" + exhibits.getNumber() + "/image.jpg");
-        exhibits.setCnAudioPath("http://localhost:9090/" + exhibits.getNumber() + "/cn.mp3");
-        exhibits.setEnAudioPath("http://localhost:9090/" + exhibits.getNumber() + "/en.mp3");
+        exhibits.setImagePath(resPath + exhibits.getNumber() + "/image.jpg");
+        exhibits.setCnAudioPath(resPath + exhibits.getNumber() + "/cn.mp3");
+        exhibits.setEnAudioPath(resPath + exhibits.getNumber() + "/en.mp3");
 
 
         return exhibits;
@@ -100,7 +100,7 @@ public class ExhibitsManagerController {
         Map<String, Object> map = new HashMap<>();
 
         try {
-            File tempFile = new File(servicePath + exhibits.getNumber());
+            File tempFile = new File(serviceResPath + exhibits.getNumber());
             deleteFile(tempFile);
             exhibitsService.delete(exhibits.getNumber());
             map.put("success", true);
@@ -148,7 +148,7 @@ public class ExhibitsManagerController {
             map.put("msg", "名称不能重复");
             return map;
         }
-        File tempFile = new File(servicePath + exhibits.getNumber());
+        File tempFile = new File(serviceResPath + exhibits.getNumber());
         if (!tempFile.isDirectory()) {
             tempFile.mkdirs();
         }

@@ -16,7 +16,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @ComponentScan
 @Configuration
 public class WebConfigurer extends WebMvcConfigurerAdapter  {
-    @Value("${myservice.path}")
+    @Value("${myserviceres.path}")
     String servicePath;
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
