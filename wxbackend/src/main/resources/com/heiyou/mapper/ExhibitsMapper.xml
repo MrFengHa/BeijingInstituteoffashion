@@ -2,30 +2,62 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.heiyou.mapper.ExhibitsMapper">
     <insert id="addExhibits" parameterType="Exhibits">
-        insert into t_exhibits values (#{number},#{cnName},#{enName},#{cnDesc},#{enDesc})
+        insert into t_exhibits
+        values (#{number}, #{cnName}, #{enName}, #{exhibitionHallId}, #{cnDesc}, #{enDesc})
     </insert>
-    <select id="findAll" resultType="Exhibits">
-        select *
-        from t_exhibits
+    <resultMap id="exhibitsMap" type="com.heiyou.entity.Exhibits">
+        <id column="number" property="number"></id>
+        <result column="cnName" property="cnName"></result>
+        <result column="enName" property="enName"></result>
+        <result column="cnDesc" property="cnDesc"></result>
+        <result column="enDesc" property="enDesc"></result>
+        <result column="exhibitionHallId" property="exhibitionHallId"></result>
+        <association property="exhibitionHall" javaType="com.heiyou.entity.ExhibitionHall">
+            <result column="exhibitionHallId" property="id"></result>
+            <result column="hCnName" property="cnName"></result>
+            <result column="hEnName" property="enName"></result>
+        </association>
+    </resultMap>
+    <select id="findAll" resultMap="exhibitsMap">
+        select *, h.cnName hCnName, h.enName hEnName
+        from t_exhibits,
+             t_exhibitionhall h
+        where t_exhibits.`exhibitionHallId` = h.id
     </select>
 
     <select id="selectOrderByNumberCount" parameterType="string" resultType="int">
-        select count(number) from t_exhibits where number = #{number}
+        select count(number)
+        from t_exhibits
+        where number = #{number}
     </select>
 
     <select id="selectOrderByNameCount" parameterType="string" resultType="int">
-        select count(*) from t_exhibits where cnName = #{cnName}
+        select count(*)
+        from t_exhibits
+        where cnName = #{cnName}
     </select>
 
-    <delete id="delete" parameterType="string" >
-        delete from t_exhibits where number = #{number}
+    <delete id="delete" parameterType="string">
+        delete
+        from t_exhibits
+        where number = #{number}
     </delete>
 
-    <select id="findById" parameterType="string" resultType="Exhibits">
-        select * from t_exhibits where number = #{number}
+    <select id="findById" parameterType="string" resultMap="exhibitsMap">
+        select *, h.cnName hCnName, h.enName hEnName
+        from t_exhibits,
+             t_exhibitionhall h
+        where t_exhibits.`exhibitionHallId` = h.id
+          and number = #{number}
     </select>
 
     <update id="updateExhibits" parameterType="Exhibits">
-        update t_exhibits set cnName=#{cnName},enName=#{enName},cnDesc = #{cnDesc},enDesc=#{enDesc} where number = #{number}
+        update t_exhibits
+        set cnName=#{cnName},
+            enName=#{enName},
+            cnDesc = #{cnDesc},
+            enDesc=#{enDesc},
+            exhibitionHallId=#{exhibitionHallId}
+        where number = #{number}
     </update>
 </mapper>

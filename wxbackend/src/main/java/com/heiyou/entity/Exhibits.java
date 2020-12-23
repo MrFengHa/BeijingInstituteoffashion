@@ -23,9 +23,11 @@ public class Exhibits {
     private String number;
     private String cnName;
     private String enName;
+    private String exhibitionHallId;
     private String cnDesc;
     private String enDesc;
     private String imagePath;
     private String cnAudioPath;
     private String enAudioPath;
+    private ExhibitionHall exhibitionHall;
 }

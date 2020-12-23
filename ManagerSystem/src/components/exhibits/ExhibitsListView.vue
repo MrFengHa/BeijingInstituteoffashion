@@ -19,6 +19,10 @@
         prop="enName">
       </el-table-column>
       <el-table-column
+        label="所处展馆"
+        prop="exhibitionHall.cnName">
+      </el-table-column>
+      <el-table-column
         align="right">
         <template slot="header" slot-scope="scope">
           <el-input
@@ -56,7 +60,7 @@
       },
       findAll(){
         let _this = this;
-        this.$http.get("manager/findAll").then((res)=>{
+        this.$http.get("exhibits/findAll").then((res)=>{
           _this.tableData = res.data
         })
       },
@@ -66,9 +70,8 @@
       },
       handleDelete(index, row) {
         let _this = this;
-        this.$http.post("manager/deleteExhibits",row).then((res)=>{
+        this.$http.post("exhibits/deleteExhibits",row).then((res)=>{
           if (res.data.success==true) {
-            console.log(res.data.success)
             this.$message({
                 message: "删除成功",
                 type: 'success',

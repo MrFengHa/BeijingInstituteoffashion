@@ -5,7 +5,8 @@ import MainView from "../components/MainView";
 import ExhibitsListView from "../components/exhibits/ExhibitsListView";
 import ExhibitsManager from "../components/exhibits/ExhibitsManager";
 import ShowView from "../components/wxshow/ShowView";
-
+import ExhibitionHallListView from "../components/exhibitionhall/ExhibitionHallListView";
+import ExhibitionHallManager from "../components/exhibitionhall/ExhibitionHallManager";
 Vue.use(Router)
 
 export default new Router({
@@ -20,7 +21,10 @@ export default new Router({
 
         },
         {path:"/exhibits/exhibitsToAdd",component:ExhibitsManager},
-        {path:"/exhibits/exhibitsToUpdate",component:ExhibitsManager}
+        {path:"/exhibits/exhibitsToUpdate",component:ExhibitsManager},
+        {path:"/exhibitionhall/exhibitionhallList",component:ExhibitionHallListView},
+        {path:"/exhibitionHall/exhibitionHallToAdd",component:ExhibitionHallManager},
+        {path:"/exhibitionHall/exhibitionHallToUpdate",component:ExhibitionHallManager},
         ]
     },
 

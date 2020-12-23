@@ -1,5 +1,7 @@
 package com.heiyou.controller;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
+import com.heiyou.entity.ExhibitionHall;
 import com.heiyou.entity.Exhibits;
 import com.heiyou.service.ExhibitsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +17,14 @@ import java.util.Map;
 
 /**
  * 文件描述
- *
+ * 展品管理
  * @author 冯根源
  * @date 2020/12/19 22:29
  */
 @RestController
 @CrossOrigin
-@RequestMapping("manager")
-public class ExhibitsManagerController {
+@RequestMapping("exhibits")
+public class ExhibitsController {
     @Autowired
     ExhibitsService exhibitsService;
     @Value("${myserviceres.path}")
@@ -37,9 +39,8 @@ public class ExhibitsManagerController {
             @RequestParam MultipartFile cnAudio,
             @RequestParam MultipartFile enAudio) {
         Integer exhibitsNameCount = exhibitsService.selectOrderByNameCount(exhibits.getCnName());
-
         HashMap<String, Object> map = new HashMap();
-        if (exhibitsNameCount >= 1) {
+        if (exhibitsNameCount > 1) {
             map.put("success", false);
             map.put("msg", "名称不能重复");
             return map;
@@ -83,9 +84,9 @@ public class ExhibitsManagerController {
         exhibits.setCnAudioPath(resPath + exhibits.getNumber() + "/cn.mp3");
         exhibits.setEnAudioPath(resPath + exhibits.getNumber() + "/en.mp3");
 
-
         return exhibits;
     }
+
 
 
     /**
@@ -148,6 +149,7 @@ public class ExhibitsManagerController {
             map.put("msg", "名称不能重复");
             return map;
         }
+
         File tempFile = new File(serviceResPath + exhibits.getNumber());
         if (!tempFile.isDirectory()) {
             tempFile.mkdirs();
@@ -162,13 +164,15 @@ public class ExhibitsManagerController {
             enAudio.transferTo(enAudioFile);
 
             exhibitsService.addExhibits(exhibits);
+            map.put("success", true);
         } catch (Exception e) {
             e.printStackTrace();
             deleteFile(tempFile);
             map.put("success", false);
+            map.put("msg", "请联系管理员");
             return map;
         }
-        map.put("success", true);
+
         return map;
 
     }
@@ -176,6 +180,7 @@ public class ExhibitsManagerController {
 
     @GetMapping("findAll")
     public List<Exhibits> findAll() {
+
 
         return exhibitsService.findAll();
     }

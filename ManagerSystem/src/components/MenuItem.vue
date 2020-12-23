@@ -16,6 +16,7 @@
       <el-menu-item v-for="(item,i) in exhibitsList" :key="i" :index="item.path" >
         {{item.menuName}}
       </el-menu-item>
+
     </el-submenu>
 
 
@@ -28,7 +29,8 @@
     data() {
       return {
         exhibitsList: [
-          {path: "/exhibits/exhibitsList", menuName: "展品列表"}
+          {path: "/exhibits/exhibitsList", menuName: "展品列表"},
+          {path: "/exhibitionhall/exhibitionhallList", menuName: "展厅列表"},
 
         ]
 

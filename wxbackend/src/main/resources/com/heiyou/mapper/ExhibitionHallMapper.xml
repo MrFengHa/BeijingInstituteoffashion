@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heiyou.mapper.ExhibitionHallMapper">
+    <select id="findAll" resultType="ExhibitionHall">
+        select *
+        from t_exhibitionhall
+    </select>
+    <insert id="addExhibitionHall" parameterType="ExhibitionHall">
+        insert into t_exhibitionhall
+        values (#{id}, #{cnName}, #{enName})
+    </insert>
+    <select id="findById" parameterType="string" resultType="ExhibitionHall">
+        select *
+        from t_exhibitionhall
+        where id = #{id}
+    </select>
+    <update id="updateExhibitionHall" parameterType="ExhibitionHall">
+        update t_exhibitionhall
+        set cnName=#{cnName},
+            enName=#{enName}
+        where id = #{id}
+    </update>
+    <delete id="deleteExhibitionHall" parameterType="string">
+        delete
+        from t_exhibitionhall
+        where id = #{id}
+    </delete>
+</mapper>

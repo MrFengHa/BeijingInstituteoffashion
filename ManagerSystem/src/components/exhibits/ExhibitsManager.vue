@@ -9,12 +9,23 @@
       </el-form-item>
       <el-form-item label="中文名称" prop="cnName">
         <el-input v-model="ruleForm.cnName"></el-input>
-
-
       </el-form-item>
       <el-form-item label="英文名称" prop="enName">
         <el-input v-model="ruleForm.enName"></el-input>
       </el-form-item>
+
+      <el-form-item label="所处展厅" prop="exhibitionHallId">
+        <el-select v-model="ruleForm.exhibitionHallId" clearable placeholder="请选择" style="float: left;width:100%">
+          <el-option
+            v-for="item in options"
+            :key="item.id"
+            :label="item.cnName"
+            :value="item.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+
+
       <el-form-item ref="upload_attach_item_iamge" label="展示图片" prop="image" size='small'>
         <el-upload style="float: left"
                    ref="upload_attach"
@@ -129,11 +140,13 @@
           number: '',
           cnName: '',
           enName: '',
+          exhibitionHallId: '',
           cnDesc: '',
           enDesc: '',
           imagePath: '',
           cnAudioPath: '',
           enAudioPath: ''
+
         },
         srcList: [],
         imageFileList: [],
@@ -142,6 +155,7 @@
         progressPercent: 0,
         show_progress: false,
 
+        options: [],
         rules: {
           number: [
             {required: true, message: '请输入展品编号', trigger: 'blur'},
@@ -154,6 +168,9 @@
           enName: [
             {required: true, message: '请输入英文名称', trigger: 'blur'},
             {min: 1, max: 100, message: '长度在 0 到 100 个字符', trigger: 'blur'}
+          ],
+          exhibitionHallId: [
+            {required: true, message: '请为展品选择展厅', trigger: 'change'}
           ],
           image: [
             // {  message: '请选择展品图片', trigger: 'blur' },
@@ -224,9 +241,11 @@
             data.append("image", this.imageFileList[0].raw);
             data.append("cnAudio", this.cnAudioFileList[0].raw);
             data.append("enAudio", this.enAudioFileList[0].raw);
-
+            data.delete("exhibitionHall");
             for (let key in this.ruleForm) {
-              data.append(key, this.ruleForm[key])
+              if (key != "exhibitionHall") {
+                data.append(key, this.ruleForm[key])
+              }
             }
             const _loading = loading(`文件上传中，请稍后...`)
 
@@ -260,7 +279,8 @@
       },
 
       updateExhibits(data, _loading, config, _this) {
-        this.$http.post("manager/updateExhibits", data, config).then((res) => {
+        console.log(data)
+        this.$http.post("exhibits/updateExhibits", data, config).then((res) => {
 
           _loading.close(); // 关闭加载框
           // this.show_progress = false
@@ -291,7 +311,7 @@
       },
 
       addExhibits(data, _loading, config, _this) {
-        this.$http.post("manager/addExhibits", data, config).then((res) => {
+        this.$http.post("exhibits/addExhibits", data, config).then((res) => {
 
 
           _loading.close(); // 关闭加载框
@@ -324,7 +344,7 @@
 
       resetForm(formName) {
         this.$refs[formName].resetFields();
-        if (this.isUpdate){
+        if (this.isUpdate) {
           this.ruleForm.number = this.$route.query.number
         }
         this.imageFileList = [];
@@ -333,12 +353,20 @@
       }
     },
     created() {
+      let _this = this;
+      this.$http.get("exhibitionHall/findAll").then(res => {
+
+        _this.options = res.data
+      })
+
+
       if (this.$route.query.number != null) {
         this.buttonTitle = "更新";
         this.isUpdate = true;
-        let _this = this;
-        this.$http.get("manager/findById?number=" + this.$route.query.number).then((res) => {
+
+        this.$http.get("exhibits/findById?number=" + this.$route.query.number).then((res) => {
           _this.ruleForm = res.data;
+
           _this.srcList.push(res.data.imagePath);
         })
 
@@ -352,14 +380,6 @@
 </script>
 
 <style scoped>
-  .myelement {
-    text-align: left
-  }
-
-  .input_width {
-    width: 50%;
-    width: 300px;
-  }
 
   fieldset {
     border: 2px solid #DCDFE6;
