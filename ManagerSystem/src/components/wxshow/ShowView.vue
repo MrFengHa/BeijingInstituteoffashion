@@ -1,25 +1,57 @@
 <template>
   <div>
     <div v-title :data-title=this.$route.query.number></div>
-    <el-row>
-      <el-col :span="12">{{no}}：{{exhibits.number}}</el-col>
-      <el-col :span="12">{{nameTile}}:{{name}}</el-col>
+    <div style="background-color:#3A342E">
+      <el-row>
+        <el-col :span="9" :offset="2">
+          <p class="number">{{no}}：<b>&nbsp;{{exhibits.number}}&nbsp;</b></p>
+        </el-col>
+      </el-row>
 
-    </el-row>
-    <div class="imageDiv">
-      <el-image class="el-image" :src=exhibits.imagePath :preview-src-list="srcList"> </el-image>
+      <el-row>
+        <el-col :span="15">
+          <el-image class="el-image" :src=exhibits.imagePath :preview-src-list="srcList"></el-image>
+        </el-col>
+        <el-col :span="6">
+          <p :class="{cnName:isCn,enName:!isCn}">{{name}}</p></el-col>
+        <el-col :span="2" :offset="1" >
+          <el-image style="width: 5px;"
+                    src="http://39.102.41.207/static//image/right.png"></el-image>
+        </el-col>
+      </el-row>
+
+      <el-row>
+        <el-col :span="23" :offset="1">
+          <p class="schoolName">北京服装学院民族服饰博物馆</p>
+        </el-col>
+      </el-row>
+
+      <el-row>
+        <el-col :span="23" :offset="1">
+          <p class="schoolName">北京服装学院民族服饰博物馆</p>
+        </el-col>
+      </el-row>
+      <div>
+        <el-row>
+          <el-col :span="12">
+            <el-button class="button" @click="changeLanguage(1)">中文</el-button>
+          </el-col>
+          <el-col :span="12">
+            <el-button class="button" @click="changeLanguage(-1)">English</el-button>
+          </el-col>
+
+        </el-row>
+      </div>
     </div>
-    <div>
-      <el-button class="button" @click="changeLanguage(1)">中文</el-button>
-      <el-button class="button" @click="changeLanguage(-1)" style="margin-left: -1.2%">English</el-button>
-    </div>
+
+
     <div>
       <audio :src=audio controls autoplay></audio>
     </div>
     <div>
       <h2>{{name}}</h2>
     </div>
-    <div >
+    <div>
       <pre style="font-size:12px;">
       {{desc}}
     </pre>
@@ -39,28 +71,28 @@
         exhibits: {},
         isCn: true,
         no: "编号",
-        nameTile: "名称",
         name: "",
-        desc:"",
-        audio:"",
-        srcList:[]
+        desc: "",
+        audio: "",
+        srcList: [],
+        isCn: true,
 
       }
     }, methods: {
       changeLanguage(sign) {
-        if (sign>0){
+        if (sign > 0) {
           this.no = "编号";
-          this.nameTile = "名称";
           this.name = this.exhibits.cnName;
           this.desc = this.exhibits.cnDesc;
           this.audio = this.exhibits.cnAudioPath;
+          this.isCn = true;
           console.log(this.desc)
-        }else if(sign<0){
+        } else if (sign < 0) {
           this.no = "NO";
-          this.nameTile = "NAME";
           this.name = this.exhibits.enName;
           this.desc = this.exhibits.enDesc;
           this.audio = this.exhibits.enAudioPath;
+          this.isCn = false;
           console.log(this.desc)
         }
       },
@@ -72,22 +104,22 @@
     ,
     created() {
       let _this = this;
-      if ( this.$route.query.number!=null){
-        this.$http.get("manager/findById?number=" + this.$route.query.number).then((res) => {
+      if (this.$route.query.number != null) {
+        this.$http.get("exhibits/findById?number=" + this.$route.query.number).then((res) => {
           _this.exhibits = res.data;
           _this.name = res.data.cnName;
           _this.desc = res.data.cnDesc;
           _this.audio = res.data.cnAudioPath;
-          _this.srcList.push( res.data.imagePath)
+          _this.srcList.push(res.data.imagePath)
 
         })
-      }else {
-        this.$http.get("manager/findById?number=001").then((res) => {
+      } else {
+        this.$http.get("exhibits/findById?number=001").then((res) => {
           _this.exhibits = res.data;
           _this.name = res.data.cnName;
           _this.desc = res.data.cnDesc;
           _this.audio = res.data.cnAudioPath;
-          _this.srcList.push( res.data.imagePath)
+          _this.srcList.push(res.data.imagePath)
 
         })
       }
@@ -98,24 +130,48 @@
 
 <style scoped>
 
-  .imageDiv {
-    background-color: #D9EBED;
-    height: 30vh;
-    margin: auto;
-    display: flex;
-    align-items: center
+  .number {
+    color: #FFFFFF;
+    font-size: 23px;
+    height: 20px;
+  }
 
+  .number b {
+    background-color: white;
+    color: #3A342E;
   }
 
   .el-image {
     position: relative;
     align-items: center;
-    left: 25%;
-    width: 50%;
+    left: 6%;
+    width: 100%;
+    float: left;
   }
 
-  .button{
-    width: 50%;
+  .cnName {
+    color: white;
+    font-size: 25px;
+    writing-mode: tb-rl;
+    height: 220px;
+    margin-left: 19vw;
+  }
+
+  .enName {
+    color: white;
+    font-size: 15px;
+    writing-mode: tb-rl;
+    height: 220px;
+    margin-left: 19vw;
+    width: 6vw;
+  }
+  .schoolName{
+    color: white;
+  }
+
+
+  .button {
+    width: 100%;
   }
 
   pre {
@@ -124,7 +180,7 @@
     white-space: -pre-wrap;
     white-space: -o-pre-wrap;
     *word-wrap: break-word;
-    *white-space : normal ;
+    *white-space: normal;
   }
 
   #audioParent {
