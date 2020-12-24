@@ -14,7 +14,7 @@
         </el-col>
         <el-col :span="6">
           <p :class="{cnName:isCn,enName:!isCn}">{{name}}</p></el-col>
-        <el-col :span="2" :offset="1" >
+        <el-col :span="2" :offset="1">
           <el-image style="width: 5px;"
                     src="http://39.102.41.207/static//image/right.png"></el-image>
         </el-col>
@@ -22,17 +22,17 @@
 
       <el-row>
         <el-col :span="23" :offset="1">
-          <p class="schoolName">北京服装学院民族服饰博物馆</p>
+          <p class="schoolName">{{schoolName}}</p>
         </el-col>
       </el-row>
 
-      <el-row>
+      <el-row style="height: 30px" >
         <el-col :span="23" :offset="1">
-          <p class="schoolName">北京服装学院民族服饰博物馆</p>
+          <b>{{hallName}}</b>
         </el-col>
       </el-row>
       <div>
-        <el-row>
+        <el-row style="background-color: #FFFFFF">
           <el-col :span="12">
             <el-button class="button" @click="changeLanguage(1)">中文</el-button>
           </el-col>
@@ -76,6 +76,8 @@
         audio: "",
         srcList: [],
         isCn: true,
+        schoolName: "北京服装学院民族服饰博物馆",
+        hallName: ''
 
       }
     }, methods: {
@@ -86,14 +88,16 @@
           this.desc = this.exhibits.cnDesc;
           this.audio = this.exhibits.cnAudioPath;
           this.isCn = true;
-          console.log(this.desc)
+          this.schoolName = "北京服装学院民族服饰博物馆";
+          this.hallName = this.exhibits.exhibitionHall.cnName;
         } else if (sign < 0) {
           this.no = "NO";
           this.name = this.exhibits.enName;
           this.desc = this.exhibits.enDesc;
           this.audio = this.exhibits.enAudioPath;
           this.isCn = false;
-          console.log(this.desc)
+          this.schoolName = "Beijing Institute Of Fashion Technology";
+          this.hallName = this.exhibits.exhibitionHall.enName;
         }
       },
 
@@ -111,7 +115,7 @@
           _this.desc = res.data.cnDesc;
           _this.audio = res.data.cnAudioPath;
           _this.srcList.push(res.data.imagePath)
-
+          _this.hallName = res.data.exhibitionHall.cnName;
         })
       } else {
         this.$http.get("exhibits/findById?number=001").then((res) => {
@@ -165,7 +169,8 @@
     margin-left: 19vw;
     width: 6vw;
   }
-  .schoolName{
+
+  .schoolName {
     color: white;
   }
 
