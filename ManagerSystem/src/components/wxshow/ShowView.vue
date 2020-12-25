@@ -26,7 +26,7 @@
         </el-col>
       </el-row>
 
-      <el-row style="height: 30px" >
+      <el-row style="height: 30px">
         <el-col :span="23" :offset="1">
           <b>{{hallName}}</b>
         </el-col>
@@ -43,11 +43,11 @@
         </el-row>
       </div>
     </div>
-
-
-    <div>
-      <audio :src=audio controls autoplay></audio>
-    </div>
+    <el-row>
+      <el-col :span="24">
+        <my-audio :src=audio :type="true"></my-audio>
+      </el-col>
+    </el-row>
     <div>
       <h2>{{name}}</h2>
     </div>
@@ -56,16 +56,16 @@
       {{desc}}
     </pre>
     </div>
-
-
   </div>
 
 </template>
 
 <script>
+  import MyAudio from "../Audio/MyAudio";
+
   export default {
     name: "ShowView",
-
+    components: {MyAudio},
     data() {
       return {
         exhibits: {},
@@ -73,7 +73,7 @@
         no: "编号",
         name: "",
         desc: "",
-        audio: "",
+        audio: "http://39.102.41.207/001/cn.mp3",
         srcList: [],
         isCn: true,
         schoolName: "北京服装学院民族服饰博物馆",
@@ -104,9 +104,6 @@
     }
     ,
     beforeCreate() {
-    }
-    ,
-    created() {
       let _this = this;
       if (this.$route.query.number != null) {
         this.$http.get("exhibits/findById?number=" + this.$route.query.number).then((res) => {

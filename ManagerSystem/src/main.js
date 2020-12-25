@@ -4,7 +4,8 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
+//import 'element-ui/lib/theme-chalk/index.css';
+import "./theme/element/theme/index.css"
 import axios from 'axios';
 
 axios.defaults.baseURL = "http://39.102.41.207/"; // 关键步骤–填写后台请求统一的地址

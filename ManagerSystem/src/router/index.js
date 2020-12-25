@@ -7,11 +7,14 @@ import ExhibitsManager from "../components/exhibits/ExhibitsManager";
 import ShowView from "../components/wxshow/ShowView";
 import ExhibitionHallListView from "../components/exhibitionhall/ExhibitionHallListView";
 import ExhibitionHallManager from "../components/exhibitionhall/ExhibitionHallManager";
+
+
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {path: '/', name: 'ShowView', component: ShowView,},
+    // {path: '/Audio', name: 'myAudio', component: myAudio,},
     {
       path: '/manager',
       name: 'MainView',
