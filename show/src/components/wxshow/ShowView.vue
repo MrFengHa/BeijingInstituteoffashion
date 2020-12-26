@@ -82,7 +82,7 @@
         no: "编号",
         name: "",
         desc: "",
-        audio: "http://39.102.41.207/0001/cn.mp3",
+        audio: "",
         srcList: [],
         hallName: ''
 
