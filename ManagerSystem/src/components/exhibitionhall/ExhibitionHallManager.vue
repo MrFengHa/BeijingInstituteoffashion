@@ -39,7 +39,7 @@
         rules: {
           id: [
             {required: true, message: '展厅id', trigger: 'blur'},
-            {min: 1, max: 3, message: '编号为两个字符', trigger: 'blur'}
+            {min: 1, max: 2, message: '编号为两个字符', trigger: 'blur'}
           ],
           cnName: [
             {required: true, message: '请输入中文名称', trigger: 'blur'},

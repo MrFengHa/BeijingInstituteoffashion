@@ -159,7 +159,7 @@
         rules: {
           number: [
             {required: true, message: '请输入展品编号', trigger: 'blur'},
-            {min: 3, max: 3, message: '编号为三个字符', trigger: 'blur'}
+            {min: 4, max: 4, message: '编号为四个字符', trigger: 'blur'}
           ],
           cnName: [
             {required: true, message: '请输入中文名称', trigger: 'blur'},
@@ -167,7 +167,7 @@
           ],
           enName: [
             {required: true, message: '请输入英文名称', trigger: 'blur'},
-            {min: 1, max: 100, message: '长度在 0 到 100 个字符', trigger: 'blur'}
+            {min: 1, max: 200, message: '长度在 0 到 200 个字符', trigger: 'blur'}
           ],
           exhibitionHallId: [
             {required: true, message: '请为展品选择展厅', trigger: 'change'}

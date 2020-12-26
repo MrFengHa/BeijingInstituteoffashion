@@ -1,10 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import LoginView from "../components/LoginView";
 import MainView from "../components/MainView";
 import ExhibitsListView from "../components/exhibits/ExhibitsListView";
 import ExhibitsManager from "../components/exhibits/ExhibitsManager";
-import ShowView from "../components/wxshow/ShowView";
 import ExhibitionHallListView from "../components/exhibitionhall/ExhibitionHallListView";
 import ExhibitionHallManager from "../components/exhibitionhall/ExhibitionHallManager";
 
@@ -13,10 +11,8 @@ Vue.use(Router)
 
 export default new Router({
   routes: [
-    {path: '/', name: 'ShowView', component: ShowView,},
-    // {path: '/Audio', name: 'myAudio', component: myAudio,},
     {
-      path: '/manager',
+      path: '/',
       name: 'MainView',
       component: MainView,
       children:[
