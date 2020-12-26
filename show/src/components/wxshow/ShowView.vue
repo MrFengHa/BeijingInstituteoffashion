@@ -5,7 +5,7 @@
     <el-row>
       <el-col :span="24">
         <div class="hallNameTitle">
-          <h2 align="center"> {{hallName}}</h2>
+          <h2  align="center"> {{hallName}}</h2>
         </div>
       </el-col>
     </el-row>
@@ -45,10 +45,13 @@
 
 
     <el-row>
-      <el-col :span="24" class="textName">
+      <hr style="width:100%;"/>
+      <el-col :span="24" class="textName" >
+<!--        class="textName"-->
         <!--        <p :class="{textCnName:isCn,textEnName:!isCn}">{{name}}</p>-->
         <div :class="{textCnName:isCn,textEnName:!isCn}">{{name}}</div>
       </el-col>
+      <hr style="width:100%;"/>
       <el-col>
 
         <div style="width: 86vw;margin-left: 5vw;" >
@@ -149,9 +152,9 @@
   .hallNameTitle {
     background-image: url(../../assets/images/nameTitle.png);
     width: 97vw;
-    height: 6vh;
+    height: 8vh;
     background-repeat: no-repeat;
-    background-size: 96vw 6vh;
+    background-size: 96vw 8.5vh;
     border: 0;
     background-color: transparent;
     text-align: center;
@@ -182,21 +185,17 @@
   }
 
   .textName {
-    background-image: url(../../assets/images/textTitle.png);
-    width: 97vw;
-    height: 6.2vh;
-    background-repeat: no-repeat;
-    background-size: 96vw 6vh;
-    border: 0;
-    background-color: transparent;
+    /*background-image: url(../../assets/images/textTitle.png);*/
+    /*width: 97vw;*/
+    /*height: 6.2vh;*/
+    /*background-repeat: no-repeat;*/
+    /*background-size: 96vw 6vh;*/
+    /*border: 0;*/
+    /*background-color: transparent;*/
     text-align: center;
     color: black;
     display: table;
     margin: auto;
-  }
-
-  textName div::before {
-
   }
 
   .textName div {
@@ -212,13 +211,13 @@
     margin-top: 0.5vh;
     font-size: 7vw;
     font-weight: 650;
-    width: 75%;
+    width: 80%;
   }
 
   .textEnName {
-    font-size: 4vw;
+    font-size: 6vw;
     font-weight: 650;
-    width: 72%;
+    width: 80%;
   }
 
   CnDesc {
