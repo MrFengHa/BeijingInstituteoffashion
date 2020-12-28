@@ -112,10 +112,12 @@
       },
       findPage(page) {//用来处理分页的相关方法
         console.log(page)
-        console.log(this.findSize())
-        this.findAll(page, this.findSize())
+        console.log(this.pageSize)
+        this.pageNow = page;
+        this.findAll(page, this.pageSize)
       },
       findSize(size) {
+        this.pageSize = size;
         this.findAll(this.pageNow, size)
       }
     },
