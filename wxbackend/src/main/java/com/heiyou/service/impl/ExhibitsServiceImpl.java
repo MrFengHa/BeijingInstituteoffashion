@@ -91,4 +91,27 @@ public class ExhibitsServiceImpl implements ExhibitsService {
     public void updateExhibits(Exhibits exhibits) {
         exhibitsMapper.updateExhibits(exhibits);
     }
+
+    /**
+     * 分页查询
+     *
+     * @param pageNow 起始条数
+     * @param rows    查询几条数据
+     * @return
+     */
+    @Override
+    public List<Exhibits> findByPage(Integer pageNow, Integer rows) {
+        int start =(pageNow-1)*rows;
+        return exhibitsMapper.findByPage(start,rows);
+    }
+
+    /**
+     * 查询总条数
+     *
+     * @return
+     */
+    @Override
+    public Long findTotals() {
+        return exhibitsMapper.findTotals();
+    }
 }

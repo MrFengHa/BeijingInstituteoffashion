@@ -1,6 +1,7 @@
 package com.heiyou.service;
 
 import com.heiyou.entity.Exhibits;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -56,4 +57,20 @@ public interface ExhibitsService {
      * @param exhibits
      */
     void updateExhibits(Exhibits exhibits);
+
+    /**
+     * 分页查询
+     *
+     * @param pageNow 起始条数
+     * @param rows 查询几条数据
+     * @return
+     */
+    List<Exhibits> findByPage(Integer pageNow,Integer rows);
+
+    /**
+     * 查询总条数
+     *
+     * @return
+     */
+    Long findTotals();
 }

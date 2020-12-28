@@ -2,6 +2,7 @@ package com.heiyou.mapper;
 
 import com.heiyou.entity.Exhibits;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -45,6 +46,7 @@ public interface ExhibitsMapper {
 
     /**
      * 根据编号删除
+     *
      * @param number
      * @return
      */
@@ -52,6 +54,7 @@ public interface ExhibitsMapper {
 
     /**
      * 根据编号查询展品信息
+     *
      * @param number
      * @return
      */
@@ -59,7 +62,24 @@ public interface ExhibitsMapper {
 
     /**
      * 更新展品信息
+     *
      * @param exhibits
      */
     void updateExhibits(Exhibits exhibits);
+
+    /**
+     * 分页查询
+     *
+     * @param start 起始条数
+     * @param rows 查询几条数据
+     * @return
+     */
+    List<Exhibits> findByPage(@Param("start") Integer start, @Param("rows") Integer rows);
+
+    /**
+     * 查询总条数
+     *
+     * @return
+     */
+    Long findTotals();
 }

@@ -195,4 +195,20 @@ public class ExhibitsController {
         }
         tempFile.delete();
     }
+
+    /**
+     * 分页查询
+     * @return
+     */
+    @GetMapping("findByPage")
+    public Map<String,Object> findByPage(Integer pageNow,Integer pageSize){
+        Map<String,Object> map = new HashMap<>();
+        pageNow = pageSize==null?1:pageNow;
+        pageSize = pageSize==null?10:pageSize;
+        List<Exhibits> exhibitsList = exhibitsService.findByPage(pageNow, pageSize);
+        Long totals = exhibitsService.findTotals();
+        map.put("exhibitsList",exhibitsList);
+        map.put("totals",totals);
+        return map;
+    }
 }

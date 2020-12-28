@@ -60,4 +60,19 @@
             exhibitionHallId=#{exhibitionHallId}
         where number = #{number}
     </update>
+
+    <!--分页查询-->
+    <select id="findByPage" resultMap="exhibitsMap">
+        select *, h.cnName hCnName, h.enName hEnName
+        from t_exhibits,
+             t_exhibitionhall h
+
+        where t_exhibits.`exhibitionHallId` = h.id
+        limit #{start},#{rows}
+    </select>
+
+    <select id="findTotals" resultType="long">
+        select count(number)
+        from t_exhibits
+    </select>
 </mapper>

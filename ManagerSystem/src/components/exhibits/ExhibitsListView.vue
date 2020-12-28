@@ -1,10 +1,10 @@
 <template>
   <div>
     <div>
-        <el-button type="primary"  @click="toAddExhibits()" round>添加</el-button>
-      </div>
+      <el-button type="primary" @click="toAddExhibits()" round>添加</el-button>
+    </div>
     <el-table
-      :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+      :data="tableData.filter(data => !search || data.cnName.toLowerCase().includes(search.toLowerCase())||data.number.toLowerCase().includes(search.toLowerCase()))"
       style="width: 100% ; margin-top: 10px">
       <el-table-column
         label="编号"
@@ -34,14 +34,32 @@
           <el-button
             size="mini"
             type="success"
-            @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
+            @click="handleEdit(scope.$index, scope.row)">Edit
+          </el-button>
           <el-button
             size="mini"
             type="danger"
-            @click="handleDelete(scope.$index, scope.row)">Delete</el-button>
+            @click="handleDelete(scope.$index, scope.row)">Delete
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
+    <el-row>
+      <el-col :span="12" :offset="5" style="margin-top: 20px">
+        <el-pagination
+          background
+          layout="prev, pager, next,jumper,sizes,total"
+          :page-size="pageSize"
+          :current-page="pageNow"
+          :page-sizes="[10,20]"
+          :total="total"
+          @current-change="findPage"
+          @size-change="findSize"
+        >
+        </el-pagination>
+      </el-col>
+    </el-row>
+
   </div>
 
 </template>
@@ -51,27 +69,33 @@
     data() {
       return {
         tableData: [],
-        search: ''
+        search: '',
+        total: 0,
+        pageSize: 10,
+        pageNow: 1
       }
     },
     methods: {
       toAddExhibits() {
         this.$router.push({path: "/exhibits/exhibitsToAdd"});
       },
-      findAll(){
+      findAll(page, size) {
         let _this = this;
-        this.$http.get("exhibits/findAll").then((res)=>{
-          _this.tableData = res.data
+        page = page ? page : this.pageNow;
+        size = size ? size : this.pageSize;
+        this.$http.get("exhibits/findByPage?pageNow=" + page + "&pageSize=" + size).then((res) => {
+          _this.tableData = res.data.exhibitsList;
+          _this.total = res.data.totals;
         })
       },
 
       handleEdit(index, row) {
-        this.$router.push({path: "/exhibits/exhibitsToUpdate?number="+row.number});
+        this.$router.push({path: "/exhibits/exhibitsToUpdate?number=" + row.number});
       },
       handleDelete(index, row) {
         let _this = this;
-        this.$http.post("exhibits/deleteExhibits",row).then((res)=>{
-          if (res.data.success==true) {
+        this.$http.post("exhibits/deleteExhibits", row).then((res) => {
+          if (res.data.success == true) {
             this.$message({
                 message: "删除成功",
                 type: 'success',
@@ -85,10 +109,18 @@
             });
           }
         })
+      },
+      findPage(page) {//用来处理分页的相关方法
+        console.log(page)
+        console.log(this.findSize())
+        this.findAll(page, this.findSize())
+      },
+      findSize(size) {
+        this.findAll(this.pageNow, size)
       }
     },
     created() {
-     this.findAll();
+      this.findAll();
     }
   }
 </script>
