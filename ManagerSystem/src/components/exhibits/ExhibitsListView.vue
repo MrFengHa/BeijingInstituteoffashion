@@ -4,7 +4,8 @@
       <el-button type="primary" @click="toAddExhibits()" round>添加</el-button>
     </div>
     <el-table
-      :data="tableData.filter(data => !search || data.cnName.toLowerCase().includes(search.toLowerCase())||data.number.toLowerCase().includes(search.toLowerCase()))"
+      :data="tableData.filter(data => !search || data.cnName.toLowerCase().includes(search.toLowerCase())||
+      data.number.toLowerCase().includes(search.toLowerCase()))"
       style="width: 100% ; margin-top: 10px"
       stripe fit show-header>
       <el-table-column
@@ -69,7 +70,8 @@
           background
           layout="prev, pager, next,jumper,sizes,total"
           :page-size="pageSize"
-          :current-page="pageNow"
+
+          :current-page.sync="pageNow"
           :page-sizes="[10,20]"
           :total="total"
           @current-change="findPage"
@@ -138,6 +140,7 @@
           }
         })
       },
+
       findPage(page) {//用来处理分页的相关方法
         this.pageNow = page;
         this.findAll(page, this.pageSize)
@@ -147,8 +150,18 @@
         this.findAll(this.pageNow, size)
       }
     },
+
     created() {
-      this.findAll();
+      this.pageNow = Number(localStorage.getItem('pagination'))||1;
+
+      this.findAll( this.pageNow,this.pagesize);
+    },
+    beforeUpdate() {
+      //刷新页面保留当前分页，通过本地存储当前页
+      localStorage.setItem('pagination',this.pageNow);
+    },
+    beforeDestroy() {
+      localStorage.setItem('pagination',1);
     }
   }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-title :data-title=this.$route.query.number></div>
+
     <img src="../../assets/images/schoolTitle.png" class="schoolName">
     <el-row>
       <el-col :span="24">
