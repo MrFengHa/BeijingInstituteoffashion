@@ -18,6 +18,7 @@ import java.util.Map;
 /**
  * 文件描述
  * 展品管理
+ *
  * @author 冯根源
  * @date 2020/12/19 22:29
  */
@@ -32,12 +33,28 @@ public class ExhibitsController {
     @Value("${myservice.path}")
     String resPath;
 
-    @PostMapping("updateExhibits")
-    public Map<String, Object> updateExhibits(
-            Exhibits exhibits,
-            @RequestParam("image") MultipartFile image,
-            @RequestParam MultipartFile cnAudio,
-            @RequestParam MultipartFile enAudio) {
+    @PostMapping("updateFile")
+    public Map<String, Object> updateFile(@RequestParam MultipartFile file, String type, String number) {
+        Map<String, Object> map = new HashMap<>();
+        File tempFile = new File(serviceResPath + number);
+        File fileTarget = new File(tempFile + "/" + type);
+
+        try {
+            file.transferTo(fileTarget);
+            map.put("success", true);
+        } catch (IOException e) {
+
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("msg", "IO异常请联系管理员");
+        }
+        return map;
+    }
+
+    @PostMapping("updateExhibitsInfo")
+    public Map<String, Object> updateExhibitsInfo(
+            Exhibits exhibits) {
+        System.out.println(exhibits);
         Integer exhibitsNameCount = exhibitsService.selectOrderByNameCount(exhibits.getCnName());
         HashMap<String, Object> map = new HashMap();
         if (exhibitsNameCount > 1) {
@@ -45,17 +62,9 @@ public class ExhibitsController {
             map.put("msg", "名称不能重复");
             return map;
         }
-        File tempFile = new File(serviceResPath + exhibits.getNumber());
-        File imageFile = new File(tempFile + "/image.jpg");
-        File cnAudioFile = new File(tempFile + "/cn.mp3");
-        File enAudioFile = new File(tempFile + "/en.mp3");
-
         try {
-
             exhibitsService.updateExhibits(exhibits);
-            image.transferTo(imageFile);
-            cnAudio.transferTo(cnAudioFile);
-            enAudio.transferTo(enAudioFile);
+            map.put("success", true);
         } catch (Exception e) {
             e.printStackTrace();
             map.put("success", false);
@@ -64,7 +73,32 @@ public class ExhibitsController {
         }
 
 
-        map.put("success", true);
+        return map;
+
+    }
+
+
+    @PostMapping("updateExhibits")
+    public Map<String, Object> updateExhibits(
+            Exhibits exhibits) {
+        Integer exhibitsNameCount = exhibitsService.selectOrderByNameCount(exhibits.getCnName());
+        HashMap<String, Object> map = new HashMap();
+        if (exhibitsNameCount > 1) {
+            map.put("success", false);
+            map.put("msg", "名称不能重复");
+            return map;
+        }
+
+        try {
+
+            exhibitsService.updateExhibits(exhibits);
+            map.put("success", true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("msg", "请联系管理员");
+            return map;
+        }
         return map;
 
     }
@@ -86,7 +120,6 @@ public class ExhibitsController {
 
         return exhibits;
     }
-
 
 
     /**
@@ -187,9 +220,10 @@ public class ExhibitsController {
 
     /**
      * 删除文件
+     *
      * @param tempFile
      */
-    private void deleteFile(File tempFile){
+    private void deleteFile(File tempFile) {
         for (File file : tempFile.listFiles()) {
             file.delete();
         }
@@ -198,17 +232,18 @@ public class ExhibitsController {
 
     /**
      * 分页查询
+     *
      * @return
      */
     @GetMapping("findByPage")
-    public Map<String,Object> findByPage(Integer pageNow,Integer pageSize){
-        Map<String,Object> map = new HashMap<>();
-        pageNow = pageSize==null?1:pageNow;
-        pageSize = pageSize==null?10:pageSize;
+    public Map<String, Object> findByPage(Integer pageNow, Integer pageSize) {
+        Map<String, Object> map = new HashMap<>();
+        pageNow = pageSize == null ? 1 : pageNow;
+        pageSize = pageSize == null ? 10 : pageSize;
         List<Exhibits> exhibitsList = exhibitsService.findByPage(pageNow, pageSize);
         Long totals = exhibitsService.findTotals();
-        map.put("exhibitsList",exhibitsList);
-        map.put("totals",totals);
+        map.put("exhibitsList", exhibitsList);
+        map.put("totals", totals);
         return map;
     }
 }

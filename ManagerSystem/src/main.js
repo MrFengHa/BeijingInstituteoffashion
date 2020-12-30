@@ -8,7 +8,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 import axios from 'axios';
 //39.102.41.207
 axios.defaults.baseURL = "http://localhost/"; // 关键步骤–填写后台请求统一的地址
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
 
 
 Vue.prototype.$http=axios;

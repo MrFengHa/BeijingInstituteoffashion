@@ -5,6 +5,7 @@ import ExhibitsListView from "../components/exhibits/ExhibitsListView";
 import ExhibitsManager from "../components/exhibits/ExhibitsManager";
 import ExhibitionHallListView from "../components/exhibitionhall/ExhibitionHallListView";
 import ExhibitionHallManager from "../components/exhibitionhall/ExhibitionHallManager";
+import UpdateFile from "../components/exhibits/UpdateFile";
 
 
 Vue.use(Router)
@@ -15,16 +16,18 @@ export default new Router({
       path: '/',
       name: 'MainView',
       component: MainView,
-      children:[
-        {path:"/exhibits/exhibitsList",component:ExhibitsListView
+      children: [
+        {
+          path: "/exhibits/exhibitsList", component: ExhibitsListView
 
         },
-        {path:"/exhibits/exhibitsToAdd",component:ExhibitsManager},
-        {path:"/exhibits/exhibitsToUpdate",component:ExhibitsManager},
-        {path:"/exhibitionhall/exhibitionhallList",component:ExhibitionHallListView},
-        {path:"/exhibitionHall/exhibitionHallToAdd",component:ExhibitionHallManager},
-        {path:"/exhibitionHall/exhibitionHallToUpdate",component:ExhibitionHallManager},
-        ]
+        {path: "/exhibits/exhibitsToAdd", component: ExhibitsManager},
+        {path: "/exhibits/exhibitsToUpdate", component: ExhibitsManager},
+        {path: "/exhibits/exhibitsToUpdateFile", component: UpdateFile},
+        {path: "/exhibitionhall/exhibitionhallList", component: ExhibitionHallListView},
+        {path: "/exhibitionHall/exhibitionHallToAdd", component: ExhibitionHallManager},
+        {path: "/exhibitionHall/exhibitionHallToUpdate", component: ExhibitionHallManager},
+      ]
     },
 
   ]

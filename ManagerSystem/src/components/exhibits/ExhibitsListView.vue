@@ -5,7 +5,8 @@
     </div>
     <el-table
       :data="tableData.filter(data => !search || data.cnName.toLowerCase().includes(search.toLowerCase())||data.number.toLowerCase().includes(search.toLowerCase()))"
-      style="width: 100% ; margin-top: 10px">
+      style="width: 100% ; margin-top: 10px"
+      stripe fit show-header>
       <el-table-column
         label="编号"
         prop="number">
@@ -22,7 +23,9 @@
         label="所处展馆"
         prop="exhibitionHall.cnName">
       </el-table-column>
+
       <el-table-column
+        width="550%"
         align="right">
         <template slot="header" slot-scope="scope">
           <el-input
@@ -34,12 +37,28 @@
           <el-button
             size="mini"
             type="success"
-            @click="handleEdit(scope.$index, scope.row)">Edit
+            @click="EditImage(scope.$index, scope.row)">编辑图片
+          </el-button>
+          <el-button
+            size="mini"
+            type="success"
+            @click="EditCnAudio(scope.$index, scope.row)">编辑中文配音
+          </el-button>
+          <el-button
+            size="mini"
+            type="success"
+            @click="EditEnAudio(scope.$index, scope.row)">编辑英文配音
+          </el-button>
+
+          <el-button
+            size="mini"
+            type="success"
+            @click="EditInfo(scope.$index, scope.row)">编辑信息
           </el-button>
           <el-button
             size="mini"
             type="danger"
-            @click="handleDelete(scope.$index, scope.row)">Delete
+            @click="handleDelete(scope.$index, scope.row)">删除
           </el-button>
         </template>
       </el-table-column>
@@ -88,10 +107,19 @@
           _this.total = res.data.totals;
         })
       },
-
-      handleEdit(index, row) {
+      EditInfo(index, row) {
         this.$router.push({path: "/exhibits/exhibitsToUpdate?number=" + row.number});
       },
+      EditImage(index, row) {
+        this.$router.push({path: "/exhibits/exhibitsToUpdateFile?number=" + row.number + "&isImage=true"});
+      },
+      EditCnAudio(index, row){
+        this.$router.push({path: "/exhibits/exhibitsToUpdateFile?number=" + row.number + "&isCnAudio=true"});
+      },
+      EditEnAudio(index, row){
+        this.$router.push({path: "/exhibits/exhibitsToUpdateFile?number=" + row.number + "&isEnAudio=true"});
+      },
+
       handleDelete(index, row) {
         let _this = this;
         this.$http.post("exhibits/deleteExhibits", row).then((res) => {
@@ -111,8 +139,6 @@
         })
       },
       findPage(page) {//用来处理分页的相关方法
-        console.log(page)
-        console.log(this.pageSize)
         this.pageNow = page;
         this.findAll(page, this.pageSize)
       },
