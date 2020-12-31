@@ -110,6 +110,7 @@
         })
       },
       EditInfo(index, row) {
+        sessionStorage.setItem('pagination',this.pageNow);
         this.$router.push({path: "/exhibits/exhibitsToUpdate?number=" + row.number});
       },
       EditImage(index, row) {
@@ -152,17 +153,16 @@
     },
 
     created() {
-      this.pageNow = Number(localStorage.getItem('pagination'))||1;
+
+      this.pageNow = Number(sessionStorage.getItem('pagination'))||1;
 
       this.findAll( this.pageNow,this.pagesize);
     },
     beforeUpdate() {
       //刷新页面保留当前分页，通过本地存储当前页
-      localStorage.setItem('pagination',this.pageNow);
-    },
-    beforeDestroy() {
-      localStorage.setItem('pagination',1);
+      sessionStorage.setItem('pagination',this.pageNow);
     }
+
   }
 </script>
 

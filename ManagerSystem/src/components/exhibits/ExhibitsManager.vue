@@ -284,7 +284,6 @@
             data.append(key, this.ruleForm[key])
           }
          }
-        console.log(data)
 
         let _this = this;
         this.$http.post("exhibits/updateExhibitsInfo",data).then((res) => {
