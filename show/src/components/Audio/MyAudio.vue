@@ -210,7 +210,7 @@
   }
 
   .audio-container {
-    width: 89vw;
+    width: 83vw;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -218,13 +218,13 @@
   }
 
   .btn {
-    height: 36px;
-    width: 36px;
+    height: 3vh;
+    width: 5vw;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    margin-right: 20px;
+    margin-right: 2vw;
     cursor: pointer;
   }
 
