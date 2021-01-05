@@ -121,7 +121,7 @@ public class QRCodeUtils {
                 needCompress);
         mkdirs(destPath);
         //String file = new Random().nextInt(99999999) + ".jpg";
-        String file=content.replace("http://lszxydh.cn/#/?number=","")+".jpg";
+        String file=content.replace("http://beifuqrcode.cn/wxshow/index.html#/?number=","")+".jpg";
         ImageIO.write(image, FORMAT_NAME, new File(destPath + "/" + file));
         return file;
     }
@@ -252,7 +252,7 @@ public class QRCodeUtils {
             } else {
                 path += i;
             }
-            QRCodeUtils.encode(servicePath+path,destPath);
+            QRCodeUtils.encode("http://beifuqrcode.cn/wxshow/index.html#/?number="+path,destPath);
         }
 
 
